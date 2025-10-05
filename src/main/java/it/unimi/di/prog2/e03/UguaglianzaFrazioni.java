@@ -31,4 +31,17 @@ public class UguaglianzaFrazioni {
    * corrispondenti rispettivamente a numeratore e denominatore di due frazioni ed emetta nel flusso
    * d'uscita "uguali" se le frazioni sono uguali, oppure "diverse".
    */
+  public static void main(String[] args) {
+    if (args.length != 4){
+      System.out.println("inserisci solo 4 argomenti");
+      return;
+    }
+
+    int a = Integer.parseInt(args[0]);
+    int b = Integer.parseInt(args[1]);
+    int c = Integer.parseInt(args[2]);
+    int d = Integer.parseInt(args[3]);
+
+    System.out.println((long) a * d == (long) b * c ? "uguale" : "diverso");
+  }
 }

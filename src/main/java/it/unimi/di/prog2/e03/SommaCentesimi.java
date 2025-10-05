@@ -38,17 +38,37 @@ public class SommaCentesimi {
   public static void main(String[] args) {
     int totalEuro = 0;
     int totalCents = 0;
+    String result = new String();
+
     try (Scanner sc = new Scanner(System.in)) {
       while (sc.hasNext()) {
         String nextValue = sc.next();
+        
+        // parsing a monetary value (e.g. 3.52)
         if (nextValue.contains(".")){
           int dotIndex = nextValue.indexOf(".");
 
           totalEuro += Integer.parseInt(nextValue.substring(0, dotIndex));
           totalCents += Integer.parseInt(nextValue.substring(dotIndex + 1));
         }
+
+        // if cents is greater than 100, convert the exceeding value in euro
+        if (totalCents > 100){
+          totalEuro += totalCents / 100;
+          totalCents %= 100;
+        }
+
+        // add the dot at the string
+        result = totalEuro + ".";
+
+        // if cents are less than 10, add a 0 to the resulting string
+        if (totalCents < 10){
+         result += "0";
+        }
+
+        result += totalCents;
+        System.out.println(result);
       }
-      System.out.println(totalEuro + "." + totalCents);
     }
   }
 }
