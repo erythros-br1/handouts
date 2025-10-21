@@ -19,7 +19,7 @@ along with this file.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-package it.unimi.di.prog2.s05;
+package it.unimi.di.prog2.h07;
 
 /** Utility class for computing mathematical functions. */
 public class MathFunctions {
@@ -30,20 +30,18 @@ public class MathFunctions {
   /**
    * Extracts (if possible) the square root of the given number.
    *
-   * <ul>
-   *   <li><b>Requires:</b> {@literal \( x \geq 0 \)}.
-   *   <li><b>Modifies:</b> nothing.
-   *   <li><b>Effects:</b> returns {@literal \( y : | y^2 - x | < 10^{-3} \)}.
-   * </ul>
+   * <p>Partial function which, when the argument is non-negative, returns an approximation
+   * {@literal \( y \)} of the square root in the sense that {@literal \( |y^2 - x| < 10^{-3} \)}.
+   *
+   * @param x the number whose square root is to be extracted.
+   * @return an approximation of the square root.
+   * @throws IllegalArgumentException if {@code x} is negative.
    */
-  @SuppressWarnings("doclint:missing") // this is because we are still Lisokv' style
-  public static double sqrt(double x) {
-    double low = 0, high = x > 1 ? x : 1, mid = -1;
-    while (high - low > .000001) { // this is (10^-3)^2
-      mid = (high + low) / 2;
-      if (mid * mid - x < 0) low = mid;
-      else high = mid;
-    }
-    return mid;
+  public static double sqrt(double x) throws IllegalArgumentException {
+    if (x < 0) throw new IllegalArgumentException("Negative argument: " + x);
+    if (x == 0) return 0;
+    double guess = x / 2;
+    while (Math.abs(guess * guess - x) >= 0.00001) guess = (guess + x / guess) / 2;
+    return guess;
   }
 }

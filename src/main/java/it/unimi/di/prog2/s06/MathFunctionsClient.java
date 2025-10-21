@@ -19,31 +19,30 @@ along with this file.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-package it.unimi.di.prog2.s05;
+package it.unimi.di.prog2.s06;
 
-/** Utility class for computing mathematical functions. */
-public class MathFunctions {
+import java.util.Scanner;
+
+/** Client for the {@link MathFunctions} class. */
+public class MathFunctionsClient {
 
   /** . */
-  private MathFunctions() {}
+  private MathFunctionsClient() {}
 
   /**
-   * Extracts (if possible) the square root of the given number.
+   * Reads a sequence of floating-point numbers from standard input, computes their square root
+   * (when possible), and prints {@code true} or {@code false} depending on whether the result is
+   * correct within {@code 10^-3} or not.
    *
-   * <ul>
-   *   <li><b>Requires:</b> {@literal \( x \geq 0 \)}.
-   *   <li><b>Modifies:</b> nothing.
-   *   <li><b>Effects:</b> returns {@literal \( y : | y^2 - x | < 10^{-3} \)}.
-   * </ul>
+   * @param args the command line arguments (ignored).
    */
-  @SuppressWarnings("doclint:missing") // this is because we are still Lisokv' style
-  public static double sqrt(double x) {
-    double low = 0, high = x > 1 ? x : 1, mid = -1;
-    while (high - low > .000001) { // this is (10^-3)^2
-      mid = (high + low) / 2;
-      if (mid * mid - x < 0) low = mid;
-      else high = mid;
+  public static void main(String[] args) {
+    try (Scanner s = new Scanner(System.in)) {
+      while (s.hasNextDouble()) {
+        double x = s.nextDouble();
+        double y = MathFunctions.sqrt(x);
+        System.out.println(Math.abs(y * y - x) < 0.001);
+      }
     }
-    return mid;
   }
 }

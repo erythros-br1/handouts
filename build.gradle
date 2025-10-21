@@ -3,7 +3,6 @@ plugins {
   id 'application'
   id 'jacoco'
   id 'com.diffplug.spotless' version '8.0.0'
-  id 'org.cthing.locc' version '2.1.0'
 }
 
 java {
@@ -37,17 +36,16 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 tasks.withType(JavaExec).configureEach {
-  jvmArgs += ['-Duser.language=ROOT', '-Dfile.encoding=UTF-8']
+  systemProperty 'user.language', 'ROOT'
+  systemProperty 'file.encoding', 'UTF-8'
   defaultCharacterEncoding = 'UTF-8'
   enableAssertions = !providers.gradleProperty('disableAssertions').isPresent()
 }
 
-tasks.withType(Test).configureEach {
-  jvmArgs += ['-Duser.language=ROOT', '-Dfile.encoding=UTF-8']
+tasks.named('test', Test) {
+  systemProperty 'user.language', 'ROOT'
+  systemProperty 'file.encoding', 'UTF-8'
   defaultCharacterEncoding = 'UTF-8'
-}
-
-tasks.named('test') {
   useJUnitPlatform()
   testLogging {
     events 'skipped', 'failed'
@@ -66,8 +64,7 @@ application {
   mainClass = providers.gradleProperty('mainClass').getOrElse(defaultMain)
 }
 
-javadoc {
-  exclude('utils/**', 'clients/**')
+tasks.named('javadoc', Javadoc) {
   options {
     description = 'Generates Javadoc API documentation and UML diagrams for the main source code.'
     encoding = 'UTF-8'
@@ -75,9 +72,9 @@ javadoc {
     links = [ 'https://docs.oracle.com/en/java/javase/25/docs/api/' ]
     docTitle = 'Handouts — Programmazione II @ UniMI'
     overview = 'src/overview.html'
-    header = '<script type=\'text/javascript\' src=\'https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML\'></script>'
-    docletpath = configurations.umlDoclet.files.asType(List)
+    header = "<script type='text/javascript' src='https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>"
     doclet = 'nl.talsmasoftware.umldoclet.UMLDoclet'
+    docletpath = configurations.umlDoclet.files.asType(List)
     showFromPrivate()
     addBooleanOption('Xdoclint:all', true)
     addBooleanOption('Werror', true)
@@ -102,6 +99,6 @@ tasks.register('cleanActual', Delete) {
   }
 }
 
-clean {
+tasks.named('clean') {
   dependsOn cleanActual
 }
